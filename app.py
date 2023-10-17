@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL').replace("://", "ql://", 1)
 db = SQLAlchemy(app)
-CORS(app, resources={r"/appUsers/*": {"origins": "https://acard1990.github.io"}, "methods": ["GET", "HEAD", "POST", "PUT", "DELETE"], "allow_headers": ["Content-Type"]})
+CORS(app, resources={r"/appUsers/*": {"origins": "https://acard1990.github.io", "methods": ["GET", "HEAD", "POST", "PUT", "DELETE"], "allow_headers": ["Content-Type"]}})
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
