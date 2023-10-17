@@ -24,12 +24,13 @@
             <td>{{ user.last_name }}</td>
             <td>{{ user.email }}</td>
             <td>
-                <form method="POST" action="/update_user/{{ user.id }}">
-                    <input type="text" name="username" value="{{ user.username }}" required>
+                <form method="POST" action="/appUsers/update/{{ user.id }}">
+                    <input type="text" name="first_name" value="{{ user.first_name }}" required>
+                    <input type="text" name="last_name" value="{{ user.last_name }}" required>
                     <input type="email" name="email" value="{{ user.email }}" required>
                     <button type="submit">Update</button>
                 </form>
-                <a href="/delete_user/{{ user.id }}">Delete</a>
+                <a href="/appUsers/delete/{{ user.id }}">Delete</a>
             </td>
         </tr>
         {% endfor %}

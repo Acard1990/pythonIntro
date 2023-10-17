@@ -12,8 +12,13 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
 
 
-@app.route('/appUsers')
+@app.route('/')
 def index():
+    users = User.query.all()
+    return render_template('index.html', users=users)
+
+@app.route('/appUsers')
+def get_users():
     users = User.query.all()
     return render_template('index.html', users=users)
 
