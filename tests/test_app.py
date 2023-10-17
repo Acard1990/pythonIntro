@@ -15,44 +15,48 @@ def setup():
         db.drop_all()
 
 def test_index(setup):
-    response = client.get('/')
+    response = client.get('/appUsers')
     assert b'User CRUD App' in response.data
 
 def test_add_user(setup):
-    response = client.post('/add_user', data={'username': 'testuser', 'email': 'testuser@example.com'})
+    response = client.post('/appUsers', data={'first_name': 'John', 'last_name': 'Doe', 'email': 'johndoe@example.com'})
 
-    # Validate a user exist
-    added_user = User.query.filter_by(username='testuser').first()
+    # Validate a user exists
+    added_user = User.query.filter_by(first_name='John', last_name='Doe').first()
     assert added_user is not None
 
-    # Validate username and email values
-    assert added_user.username == 'testuser'
-    assert added_user.email == 'testuser@example.com'
+    # Validate first name, last name, and email values
+    assert added_user.first_name == 'John'
+    assert added_user.last_name == 'Doe'
+    assert added_user.email == 'johndoe@example.com'
 
     # Validate the response is a redirect
     assert response.status_code == 302
 
 def test_update_user(setup):
-    user = User(username='testuser', email='testuser@example.com')
+    user = User(first_name='John', last_name='Doe', email='johndoe@example.com')
     setup.session.add(user)
     setup.session.commit()
 
-    # Validate a user exist
-    response = client.post('/update_user/1', data={'username': 'updateduser', 'email': 'updated@example.com'})
-    assert User.query.filter_by(username='updateduser').first() is not None
+    # Validate a user exists
+    response = client.post('/appUsers/update/1', data={'first_name': 'Updated', 'last_name': 'User', 'email': 'updated@example.com'})
+    updated_user = User.query.get(1)
+    assert updated_user is not None
 
-    # Validate username and email values
-    assert user.username == 'updateduser'
-    assert user.email == 'updated@example.com'
+    # Validate first name, last name, and email values
+    assert updated_user.first_name == 'Updated'
+    assert updated_user.last_name == 'User'
+    assert updated_user.email == 'updated@example.com'
 
     # Validate the response is a redirect
     assert response.status_code == 302
 
 def test_delete_user(setup):
-    user = User(username='testuser', email='testuser@example.com')
+    user = User(first_name='John', last_name='Doe', email='johndoe@example.com')
     setup.session.add(user)
     setup.session.commit()
 
-    # Validate no user found 
-    client.get('/delete_user/1')
+    # Validate user exists
+    client.get('/appUsers/delete/1')
     assert User.query.get(1) is None
+
