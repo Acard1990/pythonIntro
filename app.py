@@ -5,10 +5,9 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 
-# Configuring the SQLAlchemy database URL from the DATABASE_URL environment variable
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL').replace("://", "ql://", 1)
 db = SQLAlchemy(app)
-CORS(app, resources={r"/appUsers": {"origins": "https://acard1990.github.io"}})
+# CORS(app, resources={r"/appUsers": {"origins": "https://acard1990.github.io"}})
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -69,4 +68,4 @@ port = int(os.environ.get("PORT", 5000))
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-    app.run(debug=True, port=port)
+    app.run(debug=True,host='0.0.0.0', port=port)
