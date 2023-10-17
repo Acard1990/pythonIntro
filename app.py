@@ -1,9 +1,11 @@
+import os
 from flask import Flask, request, render_template, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 db = SQLAlchemy(app)
 CORS(app, resources={r"/appUsers": {"origins": "https://acard1990.github.io"}})
 
@@ -14,7 +16,7 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
 
 @app.route('/')
-def index():
+def index(): 
     users = User.query.all()
     return render_template('index.html', users=users)
 
